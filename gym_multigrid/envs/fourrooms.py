@@ -49,7 +49,6 @@ class FourRoomsEnv(multigrid.MultiGridEnv):
     """
     self._agent_default_pos = agent_pos
     self._goal_default_pos = goal_pos
-    self.goal_pos = None
     self.two_rooms = two_rooms
     super().__init__(grid_size=grid_size, max_steps=100, n_agents=n_agents,
                      agent_view_size=agent_view_size,
