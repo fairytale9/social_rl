@@ -49,6 +49,7 @@ class FourRoomsEnv(multigrid.MultiGridEnv):
     """
     self._agent_default_pos = agent_pos
     self._goal_default_pos = goal_pos
+    self.goal_pos = None
     self.two_rooms = two_rooms
     super().__init__(grid_size=grid_size, max_steps=100, n_agents=n_agents,
                      agent_view_size=agent_view_size,
@@ -106,8 +107,9 @@ class FourRoomsEnv(multigrid.MultiGridEnv):
       goal = minigrid.Goal()
       self.put_obj(goal, *self._goal_default_pos)
       goal.init_pos, goal.cur_pos = self._goal_default_pos
+      self.goal_pos = self._goal_default_pos
     else:
-      self.place_obj(minigrid.Goal())
+      self.goal_pos = self.place_obj(minigrid.Goal())
 
     self.mission = 'Reach the goal'
 
