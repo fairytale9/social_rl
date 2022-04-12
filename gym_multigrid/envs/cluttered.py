@@ -38,9 +38,10 @@ class ClutteredMultiGrid(multigrid.MultiGridEnv):
     self.grid = multigrid.Grid(width, height)
     self.grid.wall_rect(0, 0, width, height)
     if self.randomize_goal:
-      self.place_obj(minigrid.Goal(), max_tries=100)
+      self.goal_pos = self.place_obj(minigrid.Goal(), max_tries=100)
     else:
       self.put_obj(minigrid.Goal(), width - 2, height - 2)
+      self.goal_pos = (width - 2, height - 2)
     for _ in range(self.n_clutter):
       if self.walls_are_lava:
         self.place_obj(minigrid.Lava(), max_tries=100)
