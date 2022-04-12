@@ -60,10 +60,11 @@ class EmptyEnv(multigrid.MultiGridEnv):
     self.grid.wall_rect(0, 0, width, height)
 
     if self.randomize_goal:
-      self.place_obj(minigrid.Goal(), max_tries=100)
+      self.goal_pos = self.place_obj(minigrid.Goal(), max_tries=100)
     else:
       # Place a goal square in the bottom-right corner
       self.put_obj(minigrid.Goal(), width - 2, height - 2)
+      self.goal_pos = (width - 2, height - 2)
 
     # Place the agents
     self.place_agent()
