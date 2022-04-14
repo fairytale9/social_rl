@@ -23,6 +23,7 @@ in one of four rooms.
 import gym_minigrid.minigrid as minigrid
 from social_rl.gym_multigrid import multigrid
 from social_rl.gym_multigrid.register import register
+from networkx import grid_graph
 
 
 class FourRoomsEnv(multigrid.MultiGridEnv):
@@ -57,6 +58,9 @@ class FourRoomsEnv(multigrid.MultiGridEnv):
   def _gen_grid(self, width, height):
     # Create the grid
     self.grid = multigrid.Grid(width, height)
+    self.graph = grid_graph(dim=[self.width-2, self.height-2])
+    self.wall_locs = []
+    self.wall_remove_locs = [(6, 13), (13, 6), (6, 6)]
 
     # Generate the surrounding walls
     self.grid.horz_wall(0, 0)
@@ -79,20 +83,29 @@ class FourRoomsEnv(multigrid.MultiGridEnv):
         # Vertical wall and door
         if i + 1 < 2:
           self.grid.vert_wall(x_right, y_top, room_h)
+          self.wall_locs.extend([(x_right-1, y) for y in range(y_top, y_top+room_h)])
           if not (j == 1 and self.two_rooms and height < 7):
             pos = (x_right, self._rand_int(y_top + 1, y_bottom))
             if not (pos[0] <= 1 or pos[0] >= width -1 or
                     pos[1] <= 0 or pos[1] >= height -1):
               self.grid.set(*pos, None)
+              self.wall_remove_locs.append((pos[0]-1, pos[1]-1))
 
         # Horizontal wall and door
         if not self.two_rooms:
           if j + 1 < 2:
             self.grid.horz_wall(x_left, y_bottom, room_w)
+            self.wall_locs.extend([(x, y_bottom-1) for x in range(x_left, x_left+room_w)])
             pos = (self._rand_int(x_left + 1, x_right), y_bottom)
             if not (pos[0] <= 1 or pos[0] >= width -1 or
                     pos[1] <= 0 or pos[1] >= height -1):
               self.grid.set(*pos, None)
+              self.wall_remove_locs.append((pos[0]-1, pos[1]-1))
+    
+    for w in self.wall_remove_locs:
+        self.wall_locs.remove(w)          
+    for w in self.wall_locs:
+        self.graph.remove_node(w)
 
     # Randomize the player start position and orientation
     if self._agent_default_pos is not None:
