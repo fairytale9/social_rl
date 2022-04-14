@@ -73,7 +73,7 @@ class ClutteredMultiGridSingle6x6(ClutteredMultiGrid):
 class ClutteredMultiGridSingle(ClutteredMultiGrid):
 
   def __init__(self, **kwargs):
-    super().__init__(n_agents=1, size=15, n_clutter=25, randomize_goal=True,
+    super().__init__(n_agents=1, size=15, n_clutter=25, minigrid_mode=True, randomize_goal=True,
                      agent_view_size=5, max_steps=250, **kwargs)
 
 
