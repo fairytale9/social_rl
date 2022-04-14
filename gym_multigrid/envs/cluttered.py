@@ -20,6 +20,7 @@
 import gym_minigrid.minigrid as minigrid
 from social_rl.gym_multigrid import multigrid
 from social_rl.gym_multigrid.register import register
+from networkx import grid_graph
 
 
 class ClutteredMultiGrid(multigrid.MultiGridEnv):
@@ -37,6 +38,8 @@ class ClutteredMultiGrid(multigrid.MultiGridEnv):
   def _gen_grid(self, width, height):
     self.grid = multigrid.Grid(width, height)
     self.grid.wall_rect(0, 0, width, height)
+    self.graph = grid_graph(dim=[self.width-2, self.height-2])
+    self.wall_locs = []
     if self.randomize_goal:
       self.goal_pos = self.place_obj(minigrid.Goal(), max_tries=100)
     else:
@@ -46,8 +49,11 @@ class ClutteredMultiGrid(multigrid.MultiGridEnv):
       if self.walls_are_lava:
         self.place_obj(minigrid.Lava(), max_tries=100)
       else:
-        self.place_obj(minigrid.Wall(), max_tries=100)
-
+        pos = self.place_obj(minigrid.Wall(), max_tries=100)
+        self.wall_locs.append((pos[0]-1, pos[1]-1))
+    for w in self.wall_locs:
+        self.graph.remove_node(w)
+    
     self.place_agent()
 
     self.mission = 'get to the green square'
