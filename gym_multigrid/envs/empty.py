@@ -24,6 +24,7 @@ import gym_minigrid.minigrid as minigrid
 import numpy as np
 from social_rl.gym_multigrid import multigrid
 from social_rl.gym_multigrid.register import register
+from networkx import grid_graph
 
 
 class EmptyEnv(multigrid.MultiGridEnv):
@@ -55,6 +56,7 @@ class EmptyEnv(multigrid.MultiGridEnv):
   def _gen_grid(self, width, height):
     # Create an empty grid
     self.grid = multigrid.Grid(width, height)
+    self.graph = grid_graph(dim=[self.width-2, self.height-2])
 
     # Generate the surrounding walls
     self.grid.wall_rect(0, 0, width, height)
