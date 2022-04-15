@@ -60,7 +60,10 @@ class FourRoomsEnv(multigrid.MultiGridEnv):
     self.grid = multigrid.Grid(width, height)
     self.graph = grid_graph(dim=[self.width-2, self.height-2])
     self.wall_locs = []
-    self.wall_remove_locs = [(6, 13), (13, 6), (6, 6)]
+    if self.two_rooms:
+        self.wall_remove_locs = [(6, 13)]
+    if not self.two_rooms:
+        self.wall_remove_locs = [(6, 13), (13, 6), (6, 6)]
 
     # Generate the surrounding walls
     self.grid.horz_wall(0, 0)
