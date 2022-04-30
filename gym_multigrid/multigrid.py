@@ -409,7 +409,7 @@ class MultiGridEnv(minigrid.MiniGridEnv):
 
       # Single agent case
       # Actions are discrete integer values
-      self.action_space = gym.spaces.Discrete(len(self.actions))
+      self.action_space = gym.spaces.Discrete(3)
       # Images have three dimensions
       self.image_obs_space = gym.spaces.Box(
           low=0,
@@ -418,7 +418,7 @@ class MultiGridEnv(minigrid.MiniGridEnv):
           dtype='uint8')
     else:
       # First dimension of all observations is the agent ID
-      self.action_space = gym.spaces.Box(low=0, high=len(self.actions)-1,
+      self.action_space = gym.spaces.Box(low=0, high=2,
                                          shape=(self.n_agents,), dtype='int64')
 
       self.image_obs_space = gym.spaces.Box(
